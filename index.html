@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>程知禺 | Zhiyu Cheng</title>
+    <style>
+        /* === Reset & Base === */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --text: #1a1a1a;
+            --text-secondary: #555;
+            --text-light: #888;
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --border: #e5e7eb;
+            --bg: #ffffff;
+            --bg-subtle: #f9fafb;
+            --max-w: 800px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.75;
+            font-size: 16px;
+        }
+
+        a { color: var(--accent); text-decoration: none; transition: opacity .2s; }
+        a:hover { opacity: .75; }
+
+        /* === Navigation === */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+        nav .nav-name { font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+        nav .nav-links { display: flex; gap: 24px; list-style: none; }
+        nav .nav-links a { color: var(--text-secondary); font-size: 14px; font-weight: 500; }
+        nav .nav-links a:hover { color: var(--accent); opacity: 1; }
+
+        /* Mobile hamburger */
+        .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+        .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--text); margin: 5px 0; transition: .3s; }
+
+        @media (max-width: 640px) {
+            .nav-toggle { display: block; }
+            nav .nav-links {
+                display: none; flex-direction: column; gap: 0;
+                position: absolute; top: 56px; left: 0; right: 0;
+                background: var(--bg); border-bottom: 1px solid var(--border);
+            }
+            nav .nav-links.open { display: flex; }
+            nav .nav-links a { padding: 12px 24px; border-top: 1px solid var(--border); display: block; }
+        }
+
+        /* === Sections === */
+        section { padding: 72px 24px 48px; }
+        .container { max-width: var(--max-w); margin: 0 auto; }
+
+        .section-title {
+            font-size: 22px; font-weight: 700;
+            margin-bottom: 32px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--text);
+            display: inline-block;
+        }
+
+        /* === Hero === */
+        #hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            padding-top: 56px;
+        }
+        #hero h1 { font-size: 42px; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; }
+        #hero .subtitle { font-size: 18px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; }
+        #hero .hero-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        #hero .hero-links a {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 20px; border-radius: 8px;
+            font-size: 14px; font-weight: 500;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            transition: all .2s;
+        }
+        #hero .hero-links a:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); opacity: 1; }
+
+        /* === About === */
+        #about p { color: var(--text-secondary); margin-bottom: 16px; }
+        #about strong { color: var(--text); }
+
+        /* === Education === */
+        .edu-item { margin-bottom: 28px; }
+        .edu-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+        .edu-school { font-weight: 700; font-size: 17px; }
+        .edu-date { color: var(--text-light); font-size: 14px; white-space: nowrap; }
+        .edu-degree { color: var(--text-secondary); font-size: 15px; margin-top: 2px; }
+        .edu-detail { color: var(--text-light); font-size: 14px; margin-top: 4px; }
+
+        /* === Research === */
+        .research-item { margin-bottom: 32px; padding-left: 16px; border-left: 3px solid var(--accent); }
+        .research-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+        .research-meta { font-size: 14px; color: var(--text-light); margin-bottom: 8px; }
+        .research-desc { color: var(--text-secondary); font-size: 15px; }
+        .research-desc ul { padding-left: 20px; margin-top: 6px; }
+        .research-desc li { margin-bottom: 4px; font-size: 14px; color: var(--text-secondary); }
+
+        /* === Publications === */
+        .pub-item { margin-bottom: 16px; padding: 16px 20px; background: var(--bg-subtle); border-radius: 8px; border: 1px solid var(--border); }
+        .pub-title { font-weight: 600; font-size: 15px; font-style: italic; }
+        .pub-info { font-size: 14px; color: var(--text-light); margin-top: 4px; }
+
+        /* === Skills === */
+        .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 640px) { .skills-grid { grid-template-columns: 1fr; } }
+        .skill-category { padding: 20px; background: var(--bg-subtle); border-radius: 8px; border: 1px solid var(--border); }
+        .skill-category h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--accent); }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .skill-tag {
+            font-size: 13px; padding: 4px 12px;
+            background: white; border: 1px solid var(--border);
+            border-radius: 20px; color: var(--text-secondary);
+        }
+
+        /* === Experience === */
+        .exp-item { margin-bottom: 28px; }
+        .exp-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+        .exp-company { font-weight: 700; font-size: 16px; }
+        .exp-role { color: var(--text-secondary); font-size: 15px; }
+        .exp-date { color: var(--text-light); font-size: 14px; white-space: nowrap; }
+        .exp-desc { color: var(--text-secondary); font-size: 14px; margin-top: 8px; padding-left: 16px; }
+        .exp-desc li { margin-bottom: 4px; }
+
+        /* === Awards === */
+        .award-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 4px;
+        }
+        .award-item:last-child { border-bottom: none; }
+        .award-name { font-weight: 600; font-size: 15px; }
+        .award-detail { color: var(--text-secondary); font-size: 14px; }
+
+        /* === Contact === */
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .contact-card {
+            padding: 20px; background: white; border-radius: 8px;
+            border: 1px solid var(--border); text-align: center;
+        }
+        .contact-card .label { font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+        .contact-card .value { font-size: 15px; font-weight: 600; word-break: break-all; }
+        .contact-card .value a { color: var(--accent); }
+
+        /* === Footer === */
+        footer {
+            text-align: center; padding: 32px 24px;
+            font-size: 13px; color: var(--text-light);
+            border-top: 1px solid var(--border);
+        }
+
+        /* === Scroll animations === */
+        .fade-in {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-inner">
+        <a href="#hero" class="nav-name">程知禺</a>
+        <button class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="#about">关于</a>
+            <a href="#education">教育</a>
+            <a href="#research">科研</a>
+            <a href="#publications">论文</a>
+            <a href="#skills">技能</a>
+            <a href="#experience">经历</a>
+            <a href="#awards">荣誉</a>
+            <a href="#contact">联系</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+    <div class="container">
+        <h1>程知禺</h1>
+        <p class="subtitle">统计学博士生 @ George Washington University<br>研究方向：强化学习 · 大模型 · 医学NLP</p>
+        <div class="hero-links">
+            <a href="mailto:tutu99cheng@163.com">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Email
+            </a>
+            <a href="https://github.com/tutucheng99" target="_blank">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+            <a href="#research">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                科研成果
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section id="about">
+    <div class="container fade-in">
+        <h2 class="section-title">关于我</h2>
+        <p>你好！我是程知禺，目前在乔治华盛顿大学（George Washington University）攻读统计学博士学位。我的研究方向聚焦于<strong>强化学习可解释性</strong>、<strong>大模型知识蒸馏</strong>以及<strong>医学NLP</strong>。</p>
+        <p>在科研方面，我以第一作者完成了基于知识蒸馏的医学实体识别论文，将 GPT-5.1 的能力蒸馏至轻量级模型，实现了 2500 倍推理成本降低。我还系统比较了 6 种强化学习算法的可解释性，并创新性地将功能数据分析（FDA）应用于组合博弈策略分析。</p>
+        <p>此前，我在芝加哥大学获得计算与应用数学硕士学位，在加州大学尔湾分校获得数学学士学位。我热衷于将理论研究转化为实际应用，对 AI / LLM / RL 领域的工业界机会充满兴趣。</p>
+        <p>除了学术研究，我还是一名竞技桥牌选手，曾代表中国国家青年队获得 3 次亚太冠军和 2 枚世界锦标赛铜牌。</p>
+    </div>
+</section>
+
+<!-- Education -->
+<section id="education" style="background: var(--bg-subtle);">
+    <div class="container fade-in">
+        <h2 class="section-title">教育背景</h2>
+
+        <div class="edu-item">
+            <div class="edu-header">
+                <span class="edu-school">乔治华盛顿大学</span>
+                <span class="edu-date">2024.08 - 至今</span>
+            </div>
+            <div class="edu-degree">统计学 博士（在读）&nbsp;|&nbsp; Washington, D.C.</div>
+            <div class="edu-detail">研究方向：强化学习可解释性、大模型知识蒸馏、医学NLP</div>
+            <div class="edu-detail">核心课程：强化学习、高维统计、非参数统计、贝叶斯推断、随机过程</div>
+        </div>
+
+        <div class="edu-item">
+            <div class="edu-header">
+                <span class="edu-school">芝加哥大学</span>
+                <span class="edu-date">2022.09 - 2024.03</span>
+            </div>
+            <div class="edu-degree">计算与应用数学 硕士 &nbsp;|&nbsp; GPA: 3.6/4.0 &nbsp;|&nbsp; Chicago, IL</div>
+            <div class="edu-detail">核心课程：Scientific Computing with Python、Machine Learning in Finance、非线性优化</div>
+        </div>
+
+        <div class="edu-item">
+            <div class="edu-header">
+                <span class="edu-school">加州大学尔湾分校</span>
+                <span class="edu-date">2018.09 - 2022.06</span>
+            </div>
+            <div class="edu-degree">数学 学士（Data Science 方向）&nbsp;|&nbsp; GPA: 3.6/4.0 &nbsp;|&nbsp; Irvine, CA</div>
+            <div class="edu-detail">核心课程：Category Theory、Numerical Analysis、Real Analysis、Group Theory</div>
+        </div>
+    </div>
+</section>
+
+<!-- Research -->
+<section id="research">
+    <div class="container fade-in">
+        <h2 class="section-title">科研经历</h2>
+
+        <div class="research-item">
+            <div class="research-title">基于知识蒸馏的低成本医学实体识别系统</div>
+            <div class="research-meta">2025.09 - 2026.03 &nbsp;|&nbsp; GPT-5.1 / PubMedBERT / CRF / PyTorch / Flask</div>
+            <div class="research-desc">
+                <ul>
+                    <li>针对罕见病（先天性代谢异常）临床辅助诊断场景，解决 LLM 推理成本高、延迟大等工程落地瓶颈</li>
+                    <li>设计完整知识蒸馏 pipeline：以 GPT-5.1 为 Teacher，PubMedBERT-CRF（110M）为 Student，面向 6 类医学实体识别任务</li>
+                    <li>提出多温度自一致性策略（T=0.2/0.3/0.5），从 LLM 离散输出重建 token 级软标签概率分布</li>
+                    <li>实现推理成本从 $5/case 降至 $0.002/case（2500 倍降低），模型可在 CPU 上 180ms 内完成推理</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="research-item">
+            <div class="research-title">脓毒症治疗策略的强化学习与可解释性研究</div>
+            <div class="research-meta">2025.08 - 2025.10 &nbsp;|&nbsp; DQN / CQL / SAC / d3rlpy / Stable-Baselines3 / LEG</div>
+            <div class="research-desc">
+                <ul>
+                    <li>系统比较 6 种 RL 算法（BC/CQL/DQN/DDQN-Attention/DDQN-Residual/SAC）在脓毒症治疗决策中的性能-可解释性权衡</li>
+                    <li>证明 Offline RL 算法（CQL）可在不牺牲性能前提下提供 600 倍于传统算法的可解释性</li>
+                    <li>基于 MIMIC-III 数据库的 gym-sepsis 模拟环境，使用 LEG 进行可解释性定量分析</li>
+                    <li>完成 29 页 JASA 格式论文，含 SOFA 分层分析、90+ 张 LEG 可视化图</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="research-item">
+            <div class="research-title">桥牌 AI 叫牌策略的统计可解释性研究</div>
+            <div class="research-meta">2025.10 - 2025.12 &nbsp;|&nbsp; JAX / PGX / PPO / FDA / JSD / GAM · RuleFit</div>
+            <div class="research-desc">
+                <ul>
+                    <li>将功能数据分析（FDA）创新性地应用于组合博弈数据，为 RL 策略的统计可解释性分析提供新范式</li>
+                    <li>通过 GAM/RuleFit 将黑盒 RL 策略蒸馏为可解释模型，评估策略蒸馏保真度</li>
+                    <li>完成 JASA 格式论文，含 bootstrap 显著性检验、JSD 热力图、策略蒸馏保真度分析</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Publications -->
+<section id="publications" style="background: var(--bg-subtle);">
+    <div class="container fade-in">
+        <h2 class="section-title">论文发表</h2>
+        <div class="pub-item">
+            <div class="pub-title">Low-Cost Medical Entity Recognition for Rare Disease Diagnosis via Knowledge Distillation</div>
+            <div class="pub-info"><strong>Zhiyu Cheng</strong>. Preprint, 2026.</div>
+            <div class="pub-info" style="margin-top:8px; color: var(--text-secondary);">提出基于多温度自一致性的知识蒸馏框架，将 GPT-5.1 蒸馏至 PubMedBERT-CRF，实现 2500 倍推理成本降低。</div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+    <div class="container fade-in">
+        <h2 class="section-title">专业技能</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>编程语言与框架</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">PyTorch</span>
+                    <span class="skill-tag">JAX</span>
+                    <span class="skill-tag">R</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">C++</span>
+                    <span class="skill-tag">MATLAB</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3>大模型与 NLP</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Knowledge Distillation</span>
+                    <span class="skill-tag">Prompt Engineering</span>
+                    <span class="skill-tag">HuggingFace</span>
+                    <span class="skill-tag">BIO 序列标注</span>
+                    <span class="skill-tag">CRF</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3>强化学习</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">PPO</span>
+                    <span class="skill-tag">DQN</span>
+                    <span class="skill-tag">CQL</span>
+                    <span class="skill-tag">SAC</span>
+                    <span class="skill-tag">DDQN</span>
+                    <span class="skill-tag">Reward Modeling</span>
+                    <span class="skill-tag">可解释性分析</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3>统计与工具</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">FDA</span>
+                    <span class="skill-tag">贝叶斯推断</span>
+                    <span class="skill-tag">因果推断</span>
+                    <span class="skill-tag">高维统计</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">Flask</span>
+                    <span class="skill-tag">Linux</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">LaTeX</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Experience -->
+<section id="experience" style="background: var(--bg-subtle);">
+    <div class="container fade-in">
+        <h2 class="section-title">实习经历</h2>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <div>
+                    <span class="exp-company">申万宏源证券</span>
+                    <span class="exp-role"> · 量化衍生品组 · 量化实习生</span>
+                </div>
+                <span class="exp-date">2023.08 | 北京</span>
+            </div>
+            <ul class="exp-desc">
+                <li>使用 Python 自动化基金经理台账检查流程，将人工逐条核对转化为批量自动校验，效率提升 99.9% 以上</li>
+                <li>与研发部门协作实现自动化风控系统，将个人脚本集成至部门级生产系统，实现每日自动运行与异常告警</li>
+            </ul>
+        </div>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <div>
+                    <span class="exp-company">MechCraft Tech</span>
+                    <span class="exp-role"> · Quantitative Researcher</span>
+                </div>
+                <span class="exp-date">2023.10 - 2023.11</span>
+            </div>
+            <ul class="exp-desc">
+                <li>使用 Python 创建灵活的回测框架，支持自定义交易策略、时间框架和频率</li>
+                <li>分析回测表现指标（Sharpe Ratio、最大回撤、累积收益等）并使用 Plotly 可视化结果</li>
+            </ul>
+        </div>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <div>
+                    <span class="exp-company">WorldQuant BRAIN</span>
+                    <span class="exp-role"> · 量化 Alpha 研究竞赛 · 金奖</span>
+                </div>
+                <span class="exp-date">2023.08 - 至今</span>
+            </div>
+            <ul class="exp-desc">
+                <li>在 US Top 3000 股票池上设计、回测 Alpha 因子信号</li>
+                <li>提交 8 个 Alpha 因子信号（含行业中性化处理），基于 Fama-French、Carhart 等因子模型验证有效性</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Awards -->
+<section id="awards">
+    <div class="container fade-in">
+        <h2 class="section-title">荣誉奖项</h2>
+
+        <div class="award-item">
+            <div>
+                <div class="award-name">3 次亚太桥牌联合会青年冠军</div>
+                <div class="award-detail">代表中国国家青年队参赛</div>
+            </div>
+        </div>
+        <div class="award-item">
+            <div>
+                <div class="award-name">2 枚世界青年桥牌锦标赛铜牌</div>
+                <div class="award-detail">World Youth Bridge Championship</div>
+            </div>
+        </div>
+        <div class="award-item">
+            <div>
+                <div class="award-name">WorldQuant BRAIN 量化竞赛金奖</div>
+                <div class="award-detail">Hedge Fund Alpha Competition, 2023</div>
+            </div>
+        </div>
+        <div class="award-item">
+            <div>
+                <div class="award-name">North American Collegiate Bowl 银奖</div>
+                <div class="award-detail">2024</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" style="background: var(--bg-subtle);">
+    <div class="container fade-in">
+        <h2 class="section-title">联系方式</h2>
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="label">邮箱</div>
+                <div class="value"><a href="mailto:tutu99cheng@163.com">tutu99cheng@163.com</a></div>
+            </div>
+            <div class="contact-card">
+                <div class="label">GitHub</div>
+                <div class="value"><a href="https://github.com/tutucheng99" target="_blank">github.com/tutucheng99</a></div>
+            </div>
+            <div class="contact-card">
+                <div class="label">位置</div>
+                <div class="value">Washington, D.C.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2026 程知禺 (Zhiyu Cheng). All rights reserved.</p>
+</footer>
+
+<!-- Scripts -->
+<script>
+    // Scroll fade-in animation
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Mobile nav toggle
+    document.getElementById('navToggle').addEventListener('click', () => {
+        document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        a.addEventListener('click', () => {
+            document.getElementById('navLinks').classList.remove('open');
+        });
+    });
+
+    // Active nav highlight on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(s => {
+            if (scrollY >= s.offsetTop - 100) current = s.id;
+        });
+        navLinks.forEach(a => {
+            a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+        });
+    });
+</script>
+
+</body>
+</html>
